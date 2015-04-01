@@ -1,0 +1,2 @@
+1) install kivy - http://kivy.org/docs/installation/installation.html 
+2) execute python3 firstApp.py
