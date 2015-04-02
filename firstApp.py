@@ -32,7 +32,7 @@ class MyApp(App):
         sm.add_widget(userInterface.SpendMoneyScreen(name='spendMoney'))
 
         return sm
-
+#executes the program
 if __name__ == '__main__':
     MyApp().run()
 

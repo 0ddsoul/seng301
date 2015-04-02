@@ -1,10 +1,11 @@
-class SavingTips:
+class SavingTips: 
+#contruct using saving tips
 	def __init__(self, history):
 		self.history = history
-		
+#loads the history to this class
 	def updateHistory(self, history):
 		self.history = history
-
+#keeps track of the amount spent on different types 
 	def getTip(self):
 		housing = 0
 		transportation = 0
