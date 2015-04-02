@@ -1,5 +1,5 @@
 class Budget:
-	def __init__(self, resetint, amount):
+	def __init__(self, resetint, amount): ##reset interval
 		self.resetint = resetint
 		self.amount = amount
 		self.initialAmount = amount

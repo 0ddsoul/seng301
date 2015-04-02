@@ -18,10 +18,14 @@ class MyApp(App):
         sm.add_widget(userInterface.AccountsScreenNewAcct(name='newAccount'))
         sm.add_widget(userInterface.PaymentsScreen(name='payments'))
         sm.add_widget(userInterface.DebtScreen(name='debt'))
-        sm.add_widget(userInterface.HistoryScreen(name='history'))
+        sm.add_widget(userInterface.DebtScreenNewDebt(name='newDebt'))
+        sm.add_widget(userInterface.DebtPayment(name='DebtPayment'))
+        sm.add_widget(userInterface.DebtIncrease(name='DebtIncrease'))
         sm.add_widget(userInterface.BudgetScreen(name='budget'))
-        sm.add_widget(userInterface.GoalsScreen(name='goals'))
-        sm.add_widget(userInterface.NewGoalsScreen(name='newGoal'))
+        sm.add_widget(userInterface.GoalsScreen(name='goal'))
+        sm.add_widget(userInterface.GoalsPayment(name='GoalsPayment'))
+        sm.add_widget(userInterface.GoalsScreenNewGoals(name='newGoals'))
+        sm.add_widget(userInterface.GoalsIncrease(name='GoalsIncrease'))
         sm.add_widget(userInterface.TipCalcScreen(name='tipCalc'))
         sm.add_widget(userInterface.BillSplitterScreen(name='billSplitter'))
         sm.add_widget(userInterface.SaveMoneyScreen(name='saveMoney'))
@@ -31,3 +35,4 @@ class MyApp(App):
 
 if __name__ == '__main__':
     MyApp().run()
+

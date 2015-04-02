@@ -15,7 +15,14 @@ class SavingTips:
 		taxes = 0
 		services = 0
 		
-		paymentTypes = ["housing", "transportation", "food", "entertainment", "insurance", "apparel", "taxes", "services"]
+		paymentTypes = ["Your housing seems to consume the\nlargest portion of your income.\nPerhaps you could downsize?",
+		"Your transportation costs are the highest\nof all your expences.\nPerhaps you could pick up biking?", 
+		"Try stopping at wholesale grocery stores\nto lower your food costs.", 
+		"Your entertainment costs are quite high,\nWork more play less!", 
+		"Your insurance costs are very high\ncompared to your other expenses.\nPerhaps expore other insurance providers?", 
+		"You spend most of your money on apparel.\nInvesting in high quality products can increase\nthe life of the product significantly.", 
+		"Most of your income is going towards taxes.\nConsider depositing some income into a RRSP\nto lower your tax bracket.", 
+		"You spend most of your money on services.\nInvesting in high quality products can lower\nthe cost of its maintenance significantly."]
 		
 		for payment in self.history:
 			if payment[0] == "Food":
@@ -42,6 +49,6 @@ class SavingTips:
 		typeOfMost = payments.index(mostMoney)
 		typeOfMost = paymentTypes[typeOfMost]
 		
-		return "You spend the most on " + typeOfMost + ", you should cut down on that if possible."
+		return typeOfMost
 		
 		

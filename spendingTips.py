@@ -26,4 +26,4 @@ class SpendingTips:
 		elif amount >= self.movie:
 			return "You could go out to the movies."
 		else:
-			return "You're poor AF, stop spending money on shit and make some bank."
+			return "You have less than 15 dollars.\nPerhaps you should save more?"
