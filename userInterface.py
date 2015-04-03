@@ -24,28 +24,31 @@ from paymentHistory import PaymentHistory
 from savingTips import SavingTips
 from spendingTips import SpendingTips
 
+#manipulatable touples and lists for debt
 debt1 = Debt("No Debt", 0)
 debt2 = Debt("No Debt", 0)
 debt3 = Debt("No Debt", 0)
 debt4 = Debt("No Debt", 0)
 debt5 = Debt("No Debt", 0)
 debtList =[debt1, debt2, debt3, debt4, debt5]
-
+#manipulatable touples and lists for goals
 goal1 = Goal("No Goal", 0)
 goal2 = Goal("No Goal", 0)
 goal3 = Goal("No Goal", 0)
 goal4 = Goal("No Goal", 0)
 goal5 = Goal("No Goal", 0)
 goalList =[goal1, goal2, goal3, goal4, goal5]
-
+#manipulatable touples and lists for accounts
 account1 = Account("This account", 0, "Exist")
 account2 = Account("This account", 0, "Exist")
 account3 = Account("This account", 0, "Exist")
 account4 = Account("This account", 0, "Exist")
 account5 = Account("This account", 0, "Exist")
 AccountList = [account1, account2, account3, account4, account5]
+#The budget [total, remaining]
 BudgetList = [0, 0]
 Payment_History= PaymentHistory()
+#Options for spending
 TypeList = ["Housing", "Transportation", "Food", "Entertainment", "Insurance", "Apparel", "Taxes", "Services"]
 
 # UI for the main home screen
@@ -54,7 +57,7 @@ class HomeScreen(Screen):
         super(HomeScreen, self).__init__(**kwargs)
         root = Accordion(orientation='vertical')  # The home screen will have an accordion menu
 
-        #The title screen
+        #The title screen, hosts the image
         PictureScreen = AccordionItem(title='Peanut Storm Finance Manager')
         PictureScreen_layout = GridLayout(cols=1, padding=0, spacing=0)
         wimg = Image(source='sun.jpg')
@@ -138,6 +141,7 @@ class HomeScreen(Screen):
 
     # called when user selects the "History" button
     def history_pressed(self, *args):
+    	# create popup for the history.
         popupLayout = BoxLayout(orientation='vertical', padding=50, spacing=10)
 
         title_label = Label(text='[b]Payment History:[/b]', markup=True, size_hint_y=0.25)
@@ -146,6 +150,7 @@ class HomeScreen(Screen):
         sub_layout.add_widget(Label(text='Payment:'))
         sub_layout.add_widget(Label(text='Amount:'))
         sub_layout.add_widget(Label(text='Account:'))
+        #dynamically generate labels based on history in the app
         for entry in Payment_History.getHistory():  # adds information for each entry in the payment history
             for sub_entry in entry:  # adds payment data to sub layout
                 label = Label(text=str(sub_entry))
@@ -350,8 +355,6 @@ class AccountsScreenNewAcct(Screen):
         layout.add_widget(self.type_input)
         layout.add_widget(starting_label)
         layout.add_widget(self.starting_input)
-       # layout.add_widget(limit_label)
-       # layout.add_widget(limit_input)
         layout.add_widget(back_button)
         layout.add_widget(done_button)
         self.add_widget(layout)
