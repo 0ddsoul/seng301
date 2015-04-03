@@ -202,7 +202,7 @@ class TestSavingTips(unittest.TestCase):
 		myPaymentHistory = PaymentHistory()
 		mySavingTips = SavingTips(myPaymentHistory.getHistory())
 		myPaymentHistory.addNewPayment("Food", 10, "March 28, 2015")
-		expected = "You spend the most on food, you should cut down on that if possible."
+		expected = "Try stopping at wholesale grocery stores\nto lower your food costs." 
 		actual = mySavingTips.getTip()
 		self.assertEqual(expected, actual)
 	
@@ -213,7 +213,7 @@ class TestSavingTips(unittest.TestCase):
 		myPaymentHistory.addNewPayment("Food", 10, "March 28, 2015")
 		myPaymentHistory.addNewPayment("Food", 10, "March 28, 2015")
 		myPaymentHistory.addNewPayment("Transportation", 50, "March 28, 2015")
-		expected = "You spend the most on transportation, you should cut down on that if possible."
+		expected = "Your transportation costs are the highest\nof all your expences.\nPerhaps you could pick up biking?"
 		actual = mySavingTips.getTip()
 		self.assertEqual(expected, actual)
 	
@@ -243,7 +243,7 @@ class TestSpendingTips(unittest.TestCase):
 	def testEmptyAccount(self):
 		myAccount = Account("Lukas' Savings", 0, "Savings")
 		mySpendingTips = SpendingTips([myAccount])
-		expected = "You're poor AF, stop spending money on shit and make some bank."
+		expected = "You have less than 15 dollars.\nPerhaps you should save more?"
 		actual = mySpendingTips.getTip()
 		self.assertEqual(expected, actual)
 	
@@ -260,7 +260,7 @@ class TestSpendingTips(unittest.TestCase):
 		myAccount = Account("Lukas' Savings", 0, "Savings")
 		myAccount2 = Account("Lukas' Chequings", 0, "Chequings")
 		mySpendingTips = SpendingTips([myAccount, myAccount2])
-		expected = "You're poor AF, stop spending money on shit and make some bank."
+		expected = "You have less than 15 dollars.\nPerhaps you should save more?"
 		actual = mySpendingTips.getTip()
 		self.assertEqual(expected, actual)
 	
