@@ -1000,27 +1000,34 @@ class GoalsPayment(Screen):
                         #if goal amount is met popup menu saying with notification
                         if goal.getAmount() <= 0:
                                 self.say_gj()
-                        #
+                        #if goal amount is less then zero then display over budget message
                         if (BudgetList[1] < 0 and BudgetList[0]):
                                 OverBudget()
                         break
+        #transitions right and returns to goal screen 
         self.manager.transition.direction = 'right'
         self.manager.current = 'goal'
         
-        
+        #The popup screen displaying the message of congrats for reaching goal
     def say_gj(self, *args):
+        #popup box with grid layout
         popupLayout = GridLayout(cols=3, padding=50, spacing=10)
         
+        #popup box layout
         layout = BoxLayout(orientation='vertical', padding=15, spacing=10)
 
+        #title label stating congrats
         title_label = Label(text='[b]Congratualations![/b]', markup=True)
         
+        #content label stating purpose of notification 
         content_label = Label(text='You have enough money saved up!')
-
+        
+        #adding widgets to the main popout screen 
         layout.add_widget(title_label)
         layout.add_widget(content_label)
         popupLayout.add_widget(layout)
-            
+        
+        #Initializing the popup congrats notification
         popup = Popup(title='Congratulations',
             content=popupLayout,
             size_hint=(None, None), size=(400, 400))
@@ -1028,22 +1035,23 @@ class GoalsPayment(Screen):
         popup.open()
 # UI for screen where user can make a new goal       
 class GoalsScreenNewGoals(Screen):
+    #The goal name and it's input    
     name_label = Label(text='Goal Name')
     name_input = TextInput(multiline=False)
-
+    #Amount of the goal and the input box
     starting_label = Label(text='Starting Amount:')
     starting_input = TextInput(multiline=False, text='0.00')
     def __init__(self, **kwargs):
         super(GoalsScreenNewGoals, self).__init__(**kwargs)
+        #layout for the GoalsScreenNewGoals with a grid
         layout = GridLayout(cols=2, padding=50, spacing=10)
-
+        #A back button to return to home screen 
         back_button = Button(text='Back')
         back_button.bind(on_press=self.back_pressed)
-
+        #A done button to finish the creation
         done_button = Button(text='Done')
-
         done_button.bind(on_press=self.done)
-
+        #adding all the widgets into this window
         layout.add_widget(self.name_label)
         layout.add_widget(self.name_input)
         layout.add_widget(self.starting_label)
@@ -1052,41 +1060,50 @@ class GoalsScreenNewGoals(Screen):
         layout.add_widget(done_button)
         self.add_widget(layout)
 
-
+        #back pressed button goes to goal screen
     def back_pressed(self, *args):
         self.manager.transition.direction = 'right'
         self.manager.current = 'goal'
-
+        #done function when pressing done button
     def done(self, *args):
+        #goal name and amount    
         name = self.name_input.text
         start = self.starting_input.text
         start = float(start)
+        #Creates a new goal object
         newGoals = Goal(name, start)
+        #Inserts the new goal into goalList
         for goal in goalList:
             if goal.getName() == "No Goal":
                 index = goalList.index(goal)
                 goalList[index] = newGoals
                 break
+        #Returns to goal screen 
         self.manager.transition.direction = 'right'
         self.manager.current = 'goal'
         
+#method to increase the goal amount        
 class GoalsIncrease(Screen):
+    #account button 
     mainAccount_button = Button(text='Select an Account')
+    #goal button
     mainGoals_button = Button(text='Select a Goals')
+    #amount to input
     amount_input = TextInput(multiline=False, text='0.00')
     def __init__(self, **kwargs):
         super(GoalsIncrease, self).__init__(**kwargs)
+        #create the screen for increase
         layout = BoxLayout(orientation='vertical', padding=50, spacing=10)
         sub_layout = GridLayout(cols=2, size_hint_y=None, height=300)  # nested grid layout
-
+        #Choose goals button and its function when pressed
         goal_select_button = Button(text='Choose Goals')
         goal_select_button.bind(on_press=self.select_goal_pressed)
-                
+        #An amount label        
         amount_label = Label(text='Amount:')
-
+        #The button to submit your changes
         submit_button = Button(text='Increase Goal')
         submit_button.bind(on_press=self.submit)
-
+        #Add widgets to the screen
         sub_layout.add_widget(amount_label)
         sub_layout.add_widget(self.amount_input)
 
@@ -1095,15 +1112,19 @@ class GoalsIncrease(Screen):
         layout.add_widget(sub_layout)
         layout.add_widget(submit_button)
         self.add_widget(layout)
-
+        #function when Choose Goals is pressed
     def select_goal_pressed(self, *args):
+        #A popup window
         popupLayout = BoxLayout(padding=50, spacing=10)
+        #The dropdown bar
         account_dropdown = DropDown()
+        #For getting the list of Goals in the dropdown menu
         for goal in goalList:
             if goal.getName() != "No Goal":
                 new_button = Button(text=goal.getName(), size_hint_y=None, height=44)
                 new_button.bind(on_release=lambda btn: account_dropdown.select(btn.text))
                 account_dropdown.add_widget(new_button)
+        #The selected button is now the goal selected        
         self.mainGoals_button = Button(text='Select a goal')
         self.mainGoals_button.bind(on_release=account_dropdown.open)
         account_dropdown.bind(on_select=lambda instance, x: setattr(self.mainGoals_button, 'text', x))
@@ -1111,14 +1132,19 @@ class GoalsIncrease(Screen):
         popupLayout.add_widget(self.mainGoals_button)
         popup = Popup(title='Select a goal', content=popupLayout, size_hint=(None, None), size=(400, 400))
         popup.open() 
- 
+        #Function for when submit is pressed
     def submit(self, *args):
+        #The goal name
         Goalsname = self.mainGoals_button.text
+        #The amount gotten from input
         Payment = float(self.amount_input.text)
+        #finds the goal in goal list
         for goal in goalList:
                 if goal.getName() == Goalsname:
+                        #Increases the goal amount
                         goal.increaseGoal(Payment)
                         break
+        #Return to goal screen
         self.manager.transition.direction = 'right'
         self.manager.current = 'goal'  
   
@@ -1129,9 +1155,10 @@ class GoalsIncrease(Screen):
 # UI for screen that calculates tips
 class TipCalcScreen(Screen):
     # initialize all variables
+    #The bill label and the box to put input
     bill_label = Label(text='Bill amount:')
     bill_input = TextInput(multiline=False, text='0.00', input_filter='float')
-
+    #The label to select how much of a tip you want 
     ten_label = Label(text='10% Tip:')
     fifteen_label = Label(text='15% Tip:')
     twenty_label = Label(text='20% Tip:')
@@ -1142,16 +1169,18 @@ class TipCalcScreen(Screen):
     twenty_button = CheckBox(group='tip')
     other_button = CheckBox(group='tip')
 
+    #The label for tip and the amount of tip to do
     tip_label = Label(text='Tip %:')  # The user can enter a custom tip amount
     tip_input = TextInput(multiline=False, text='0', input_filter='int')
 
+    #A button for Calculating tip and it's labels
     calculate_button = Button(text='Calculate')
     tip_total_label = Label(text='Tip amount: $-.--')
     total_label = Label(text='[b]Total bill amount: $-.--[/b]', markup=True)
 
     def __init__(self, **kwargs):
         super(TipCalcScreen, self).__init__(**kwargs)
-
+        #The layout for the box for the tipcalculator screen
         layout = BoxLayout(orientation='vertical', padding=50, spacing=10)
 
         bill_layout = GridLayout(cols=2, spacing=10)  # adds a nested grid layout where user inputs bill amount
@@ -1188,16 +1217,22 @@ class TipCalcScreen(Screen):
 
         self.add_widget(layout)
 
+        #Function that runs when calculate button is pressed 
     def calculate_pressed(self, totalLabel, tipLabel, *args):
         tip_percent = 0
+        #the if statements to work with if one of the predetermined tip percentbuttons were pressed
         if self.ten_button.active: tip_percent = 10
         elif self.fifteen_button.active: tip_percent = 15
         elif self.twenty_button.active: tip_percent = 20
+        #The if statement taking the userinput of tip amount
         elif self.other_button.active: tip_percent = float(self.tip_input.text)
 
+        #bill amount is the input label
         bill_amount = self.bill_input.text
 
+        #calculates the amount of tip based off the extras_function.calculate_tip
         total_amount, tip_amount = extras_functions.calculate_tip(bill_amount, tip_percent)
+        #Label on tip is equal to the calculated amount to 2 decimal places
         tipLabel.text = 'Tip amount: $%.2f' % tip_amount
         totalLabel.text = '[b]Total bill amount: $%.2f[/b]' % total_amount
 
@@ -1208,8 +1243,11 @@ class TipCalcScreen(Screen):
 
 # UI for screen that lets users split a bill
 class BillSplitterScreen(Screen):
+    #bill amount from input box        
     bill_input = TextInput(multiline=False, text='0.00')
+    #tip amount from input box
     tip_input = TextInput(multiline=False, text='0')
+    #people amount from input box
     people_input = TextInput(multiline=False, text='0')
     tip_box = CheckBox()
 
@@ -1235,11 +1273,12 @@ class BillSplitterScreen(Screen):
         tip_layout.add_widget(self.tip_box)
         tip_layout.add_widget(self.tip_input)
 
+        #the calculate button function and its labels
         calculate_button = Button(text="Calculate")
         total_label = Label(text='Each person pays $-.--.')
         calculate_button.bind(on_press=partial(self.calculate_pressed, total_label))
 
-
+        #A menu button that returns you to the home screen when pressed
         menu_button = Button(text='Back to home menu', size_hint_x=.5, size_hint_y=.75)
         menu_button.bind(on_press=self.menu_pressed)
         # add all widgets on the page to the main layout
@@ -1250,6 +1289,7 @@ class BillSplitterScreen(Screen):
         layout.add_widget(menu_button)
         self.add_widget(layout)
 
+        #function that runs when calculate is pressed
     def calculate_pressed(self, totalLabel, *args):
         tip_percent = 0
         bill_amount = self.bill_input.text
@@ -1258,6 +1298,7 @@ class BillSplitterScreen(Screen):
         total_amount = extras_functions.calculate_bill_split(bill_amount, num_of_people, tip_percent)
         totalLabel.text = "Each person pays $%.2f" % total_amount
 
+        #return home screen
     def menu_pressed(self, *args):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
@@ -1271,9 +1312,10 @@ class SaveMoneyScreen(Screen):
         myPaymentHistory = PaymentHistory()
         title_label = Label(text='[b]Tips for Saving Money:[/b]', markup=True)
         
+        #Draws savingtips based off payment history
         mySavingTips = SavingTips(myPaymentHistory.getHistory())
         content_label = Label(text= mySavingTips.getTip())
-
+        #button to return you back to home screen
         menu_button = Button(text='Back to home menu', size_hint_x=.5, size_hint_y=.75)
         menu_button.bind(on_press=self.menu_pressed)
 
@@ -1281,7 +1323,8 @@ class SaveMoneyScreen(Screen):
         layout.add_widget(content_label)
         layout.add_widget(menu_button)
         self.add_widget(layout)
-
+        
+        #return home screen
     def menu_pressed(self, *args):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
@@ -1295,9 +1338,11 @@ class SpendMoneyScreen(Screen):
 
         title_label = Label(text='[b]Tips for Spending Money:[/b]', markup=True)
         
+        #Draws spendingtips based off payment history
         mySpendingTips = SpendingTips(AccountList)
         content_label = Label(text=mySpendingTips.getTip()) #Retrive tip for user spending custom to the user's spend-ability.
 
+        #button to return you back to home screen
         menu_button = Button(text='Back to home menu', size_hint_x=.5, size_hint_y=.75)
         menu_button.bind(on_press=self.menu_pressed)
 
@@ -1306,6 +1351,7 @@ class SpendMoneyScreen(Screen):
         layout.add_widget(menu_button)
         self.add_widget(layout)
 
+        #return home screen
     def menu_pressed(self, *args):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
