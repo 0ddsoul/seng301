@@ -797,19 +797,21 @@ class BudgetScreen(Screen):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
 
+#The function that is called when you have gone over budget based off budget input and your account
 def OverBudget(*args):
+	#the grid layout for the popup box
         popupLayout = GridLayout(cols=3, padding=50, spacing=10)
-        
+        #the layout for the popup box
         layout = BoxLayout(orientation='vertical', padding=15, spacing=10)
-
+	#the label of the box
         title_label = Label(text='[b]Over Budget[/b]', markup=True)
-        
+        #The over budget label of the notification
         content_label = Label(text='You have exceeded your budget!')
-
+	#Adding all the neccessary widgets to the popup box
         layout.add_widget(title_label)
         layout.add_widget(content_label)
         popupLayout.add_widget(layout)
-            
+        #The popup box itself and dimensions
         popup = Popup(title='Over Budget',
             content=popupLayout,
             size_hint=(None, None), size=(400, 400))
@@ -818,29 +820,35 @@ def OverBudget(*args):
 
 # UI for screen where user can view their goal
 class GoalsScreen(Screen):
+    #The button to select accounts
     mainAccount_button = Button(text='Select an Account')
+    #Button to select goal you are working towards
     mainGoals_button = Button(text='Select a Goal')
+    #Input taken from users to do the input from account to goal
     amount_input = TextInput(multiline=False, text='0.00')
+    #Creating the goal screen when pressed from home interface
     name_input = TextInput(multiline=False, text='')
     def __init__(self, **kwargs):
         super(GoalsScreen, self).__init__(**kwargs)
+        #Grid screen layout
         layout = BoxLayout(orientation='vertical', padding=50, spacing=10)
-
+        #Creating the new goal button and function call when pressed
         new_button = Button(text='New Goal')
         new_button.bind(on_press=self.new_pressed)
-
+        #Creating payment button and function call
         payment_button = Button(text='Contribute')
         payment_button.bind(on_press=self.payment_pressed)
-
+        #Creating increase goal button and the function call when pressed
         increase_button = Button(text='Increase Goal')
         increase_button.bind(on_press=self.increase_pressed)
-
+        #Creating view goal button and its function call
         view_button = Button(text='View Goals')
         view_button.bind(on_press=self.view_pressed)
-
+        #The button to go back to the homescreen
         menu_button = Button(text='Back to home menu', size_hint_x=.5, size_hint_y=.75)
         menu_button.bind(on_press=self.menu_pressed)
-
+        
+        #Adding all the widgets to the goal screen
         layout.add_widget(new_button)
         amount_input = TextInput(multiline=False, text='0.00')
         name_input = TextInput(multiline=False, text='')
@@ -850,113 +858,149 @@ class GoalsScreen(Screen):
         layout.add_widget(menu_button)
         self.add_widget(layout)
         
+        #The transtion left when pressing Increase Goal and moving to the matching screen
     def increase_pressed(self, *args):
         self.manager.transition.direction = 'left'
         self.manager.current = 'GoalsIncrease'
-
+        #The transtion left when pressing contribute and moving to the matching screen
     def payment_pressed(self, *args):
         self.manager.transition.direction = 'left'
         self.manager.current = 'GoalsPayment'
-
+        #The transtion right when pressing Back to home sending you back to home screen
     def menu_pressed(self, *args):
         self.manager.transition.direction = 'right'
         self.manager.current = 'home'
-    
+        #The transtion left when pressing NewGOal and moving to the matching screen
     def new_pressed(self, *args):
         self.manager.transition.direction = 'left'
         self.manager.current = 'newGoals'    
-        
+        #The function that opens a popup window when pressing View Goals
     def view_pressed(self, *args):
         popupLayout = GridLayout(cols=2, padding=50, spacing=10)
         
+        #Inserting the List of goals into the popup menu with name and amount
         for goal_item in goalList:
             name_label = Label(text=goal_item.getName())
             amount_label = Label(text=str(goal_item.getAmount()))
             popupLayout.add_widget(name_label)
             popupLayout.add_widget(amount_label)
-            
+        #Just setting up the title of box, its dimensions and its layout
         popup = Popup(title='Goals', content=popupLayout, size_hint=(None, None), size=(400, 400))
         popup.open()
  
 
-
+#The screen that shows up when pressing contribute
 class GoalsPayment(Screen):
+    #The button to select accounts
     mainAccount_button = Button(text='Select an Account')
+    #The button to select the goal you are contributing towards
     mainGoals_button = Button(text='Select a Goal')
+    #Input from account into goal as payment
     amount_input = TextInput(multiline=False, text='0.00')
+    
+    #Initializing all the buttons and labels for the popup screen
     def __init__(self, **kwargs):
         super(GoalsPayment, self).__init__(**kwargs)
         layout = BoxLayout(orientation='vertical', padding=50, spacing=10)
         sub_layout = GridLayout(cols=2, size_hint_y=None, height=300)  # nested grid layout
-
+        
+        #Making the button and function for pressing Choose Account button
         account_select_button = Button(text='Choose Account')
         account_select_button.bind(on_press=self.select_account_pressed)
-
+        
+        #Making the button and function for pressing Choose Goal button
         goal_select_button = Button(text='Choose Goals')
         goal_select_button.bind(on_press=self.select_goal_pressed)
-                
+        
+        #An amount for the input box        
         amount_label = Label(text='Amount:')
-
+        
+        #The button for submitting payment and its function call 
         submit_button = Button(text='Submit Payment')
         submit_button.bind(on_press=self.submit)
 
+        #Adding the amount label and action to the box
         sub_layout.add_widget(amount_label)
         sub_layout.add_widget(self.amount_input)
 
-
+        #Adding all the widgets to the Contribute Screen
         layout.add_widget(account_select_button)
         layout.add_widget(goal_select_button)
         layout.add_widget(sub_layout)
         layout.add_widget(submit_button)
         self.add_widget(layout)
         
+        #The loop that runs to bring down the pulldown menu to select an account
     def select_account_pressed(self, *args):
+    	#Creates a pulldown menu 
         popupLayout = BoxLayout(padding=50, spacing=10)
         account_dropdown = DropDown()
+        #Goes through the AccountList to find the right account with matching name and creates a new button with it
         for account in AccountList:
             if account.getName() != "This account":
                 new_button = Button(text=account.getName(), size_hint_y=None, height=44)
                 new_button.bind(on_release=lambda btn: account_dropdown.select(btn.text))
                 account_dropdown.add_widget(new_button)
+        #This is the button used to select an account to transfer money from 
         self.mainAccount_button = Button(text='Select an Account')
         self.mainAccount_button.bind(on_release=account_dropdown.open)
         account_dropdown.bind(on_select=lambda instance, x: setattr(self.mainAccount_button, 'text', x))
         
+        #Adding the dropdown menu to the popupbox
         popupLayout.add_widget(self.mainAccount_button)
         popup = Popup(title='Select an account', content=popupLayout, size_hint=(None, None), size=(400, 400))
         popup.open()   
  
+        #The loop that runs to bring down pulldown menu for selecting goals
     def select_goal_pressed(self, *args):
+        #Creates pulldown menu
         popupLayout = BoxLayout(padding=50, spacing=10)
         account_dropdown = DropDown()
+        #Goes through goalList to find the names of the goalList and creats a button with all the goals on it
         for goal in goalList:
             if goal.getName() != "No Goal":
                 new_button = Button(text=goal.getName(), size_hint_y=None, height=44)
                 new_button.bind(on_release=lambda btn: account_dropdown.select(btn.text))
                 account_dropdown.add_widget(new_button)
+        #The selected button is the one used for the Goal working with 
         self.mainGoals_button = Button(text='Select a goal')
         self.mainGoals_button.bind(on_release=account_dropdown.open)
         account_dropdown.bind(on_select=lambda instance, x: setattr(self.mainGoals_button, 'text', x))
         
+        #Adding the dropdown menu to the popupbox
         popupLayout.add_widget(self.mainGoals_button)
         popup = Popup(title='Select a goal', content=popupLayout, size_hint=(None, None), size=(400, 400))
         popup.open() 
  
+        #The function that runs when submit is selected 
     def submit(self, *args):
+    	#Account selected
         Accountname = self.mainAccount_button.text
+        #Goal selected
         Goalsname = self.mainGoals_button.text
+        #Amount of money to transfer
         Payment = float(self.amount_input.text)
+        #The function that gets the account name and performs functions on it
         for account in AccountList:
+        	#When account is found
                 if account.getName() == Accountname:
+                	#remove input amount from total in account
                         account.removeFunds(Payment)
+                        #add the transaction to the payment history 
                         Payment_History.addNewPayment("Goals Payment", Payment, account.getName())
+                        #updates budget
                         BudgetList[1] = BudgetList[1] - Payment	
                         break
+        #The function that gets the goal name and performs functions on it                
         for goal in goalList:
+        	#finds the goal
                 if goal.getName() == Goalsname:
+                	#adds money to the goal progression (subtracts from goal working towards 0)
                         goal.makePayment(Payment)
+                        #if goal amount is met popup menu saying with notification
                         if goal.getAmount() <= 0:
                                 self.say_gj()
+                        #
                         if (BudgetList[1] < 0 and BudgetList[0]):
                                 OverBudget()
                         break
